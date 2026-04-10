@@ -2,7 +2,7 @@
 -- Rotates between BT IP and USB IP every 5 epochs when both available.
 plugin = {}
 plugin.name    = "ip_display"
-plugin.version = "3.0.2"
+plugin.version = "3.0.3"
 plugin.author  = "oxigotchi"
 plugin.tag     = "default"
 
@@ -20,11 +20,11 @@ function on_epoch(state)
     tick = tick + 1
     if state.bt_connected and state.bt_ip ~= "" then
         if tick % 10 < 5 then
-            set_indicator("ip_display", state.bt_ip)
+            set_indicator("ip_display", "BT " .. state.bt_ip)
         else
-            set_indicator("ip_display", state.display_ip)
+            set_indicator("ip_display", "USB " .. state.display_ip)
         end
     else
-        set_indicator("ip_display", state.display_ip)
+        set_indicator("ip_display", "USB " .. state.display_ip)
     end
 end
