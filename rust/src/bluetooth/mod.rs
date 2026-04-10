@@ -601,6 +601,20 @@ impl BtTether {
         dbus.trust_device(device_path)?;
         info!("BT: device trusted");
 
+        // Flush BlueZ pairing data to disk before connecting
+        #[cfg(unix)]
+        {
+            let _ = std::process::Command::new("systemctl")
+                .args(&["stop", "bluetooth"])
+                .status();
+            std::thread::sleep(std::time::Duration::from_secs(2));
+            let _ = std::process::Command::new("systemctl")
+                .args(&["start", "bluetooth"])
+                .status();
+            std::thread::sleep(std::time::Duration::from_secs(2));
+            info!("BT: pairing data flushed to disk");
+        }
+
         self.connect_after_pair(device_path)
     }
 
