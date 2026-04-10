@@ -1,0 +1,19 @@
+[Unit]
+Description=PiSugar button shell init
+After=pisugar-server.service
+Requires=pisugar-server.service
+
+[Service]
+Type=oneshot
+ExecStartPre=/bin/sleep 3
+ExecStart=/bin/bash -c '\
+  echo "set_button_enable single true" | nc -q 1 localhost 8423; \
+  echo "set_button_enable double true" | nc -q 1 localhost 8423; \
+  echo "set_button_enable long true" | nc -q 1 localhost 8423; \
+  echo "set_button_shell single /usr/local/bin/pisugar-single-tap.sh" | nc -q 1 localhost 8423; \
+  echo "set_button_shell double /usr/local/bin/pisugar-double-tap.sh" | nc -q 1 localhost 8423; \
+  echo "set_button_shell long /usr/local/bin/pisugar-long-press.sh" | nc -q 1 localhost 8423'
+RemainAfterExit=yes
+
+[Install]
+WantedBy=multi-user.target

@@ -171,6 +171,9 @@ sudo cp "$REPO/tools/wifi-recovery.sh" "$PI/usr/local/bin/wifi-recovery.sh"
 sudo cp "$REPO/tools/bootlog.sh" "$PI/usr/local/bin/bootlog.sh"
 # USB0 fallback
 sudo cp "$REPO/scripts/usb0-fallback.sh" "$PI/usr/local/bin/usb0-fallback.sh"
+sudo cp "$REPO/tools/pisugar-single-tap.sh" "$PI/usr/local/bin/pisugar-single-tap.sh"
+sudo cp "$REPO/tools/pisugar-double-tap.sh" "$PI/usr/local/bin/pisugar-double-tap.sh"
+sudo cp "$REPO/tools/pisugar-long-press.sh" "$PI/usr/local/bin/pisugar-long-press.sh"
 # WiFi ndev fix
 sudo cp "$REPO/scripts/fix_ndev_on_boot.sh" "$PI/usr/local/bin/fix_ndev_on_boot.sh"
 # BT keepalive
@@ -195,7 +198,7 @@ echo "=== 7. Install systemd services ==="
 SVC_DIR="$PI/etc/systemd/system"
 
 # Copy service files from repo
-for svc in rusty-oxigotchi resize-rootfs emergency-ssh wifi-recovery wlan-keepalive \
+for svc in rusty-oxigotchi resize-rootfs emergency-ssh wifi-recovery wlan-keepalive pisugar-button-init \
            bootlog usb0-fallback fix-ndev nm-watchdog bt-agent bt-keepalive \
            buffer-cleaner epd-startup wifi-watchdog; do
     if [ -f "$REPO/services/${svc}.service" ]; then
@@ -232,7 +235,7 @@ sudo mkdir -p "$SVC_DIR/multi-user.target.wants"
 sudo mkdir -p "$SVC_DIR/timers.target.wants"
 
 # Core services
-for svc in rusty-oxigotchi resize-rootfs emergency-ssh wifi-recovery wlan-keepalive \
+for svc in rusty-oxigotchi resize-rootfs emergency-ssh wifi-recovery wlan-keepalive pisugar-button-init \
            bootlog usb0-fallback fix-ndev bt-agent wifi-watchdog; do
     if [ -f "$SVC_DIR/${svc}.service" ]; then
         sudo ln -sf "/etc/systemd/system/${svc}.service" "$SVC_DIR/multi-user.target.wants/${svc}.service"
@@ -581,7 +584,7 @@ fi
 
 echo ""
 echo "--- Services ---"
-for svc in rusty-oxigotchi resize-rootfs emergency-ssh wifi-recovery wlan-keepalive \
+for svc in rusty-oxigotchi resize-rootfs emergency-ssh wifi-recovery wlan-keepalive pisugar-button-init \
            bootlog usb0-fallback fix-ndev bt-agent wifi-watchdog; do
     verify "$svc.service" "$PI/etc/systemd/system/${svc}.service"
 done
